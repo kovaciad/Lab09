@@ -14,16 +14,16 @@ Graph::Graph(int numVertices) // 2D Dynamically allocated matrix inspired by htt
 
 Graph::~Graph()
 {
-    for (int i = 0; i < numVertices; i++)
-    {
-        delete[] matrix[i];
-    }
-    delete[] matrix;
+    // for (int i = 0; i < numVertices; i++)
+    // {
+    //     delete [] matrix[i];
+    // }
+    // delete[] matrix;
 }
 
 bool Graph::addEdge(int i, int j)
 {
-    if(i < numVertices || j < numVertices)
+    if((i < numVertices || j < numVertices) && i != j)
     {
         if (matrix[i][j] == 1)
         {

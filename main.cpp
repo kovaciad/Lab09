@@ -2,6 +2,7 @@
 #include <string>
 #include <tuple>
 #include <sstream>
+#include <fstream>
 #include "Graph.h"
 
 using namespace std;
@@ -29,8 +30,33 @@ tuple<int,int> getInputs()
     return make_tuple(from, to);
 }
 
-void callGraph(Graph graph)
+void callGraph(Graph graph, ifstream* fileInput)
 {
+    /*
+        Note about file input:
+        The first line of the input needs to be the number of vertices.
+        Then put the matrix with the size from above. This is not checked and will result in undefined behavior if not done correctly.
+    */
+    if (fileInput != nullptr) // File input
+    { 
+        for (int i = 0; i < graph.size(); i++)
+        {
+            vector<int> cols;
+            string row;
+            getline(*fileInput, row);
+            stringstream ss(row);
+            std::string edge;
+            int col = 0;
+            while (getline(ss, edge, ' '))
+            {
+                if (edge == "1")
+                {
+                    graph.addEdge(i, col);
+                }
+                col++;
+            }
+        }
+    }
     cout << INPUT_REQUEST;
     string inputString;
     int option = 9;
@@ -39,34 +65,7 @@ void callGraph(Graph graph)
         getline(cin, inputString);
         option = stoi(inputString);
     }
-    /*
-        Note about file input:
-        The first line of the input needs to be the number of vertices.
-        The second line needs to be "0" to call the file input function
-        Then put the matrix with the size that you put. This is not checked and will result in undefined behavior if not done correctly.
-    */
-    if (option == 0) // File input
-    { 
-        for (int i = 0; i < graph.size(); i++)
-        {
-            vector<int> cols;
-            string row;
-            getline(cin, row);
-            stringstream ss(row);
-            std::string edge;
-            int col = 0;
-            while (getline(ss, edge, ' '))
-            {
-                if (edge == "1")
-                {
-                    cout << "Got to the meat and potatoes" << endl;
-                    graph.addEdge(i, col);
-                }
-                col++;
-            }
-        }
-    }
-    else if (option == 1)
+    if (option == 1)
     {
         int from, to;
         tie(from, to) = getInputs();
@@ -88,7 +87,7 @@ void callGraph(Graph graph)
     else if (option == 4)
     {
         string input;
-        cout << "Vertex for in edges:\n";
+        cout << "Vertex for out edges:\n";
         getline(cin, input);
         int vertex = stoi(input);
         vector<int> outEdges = graph.outEdges(vertex);
@@ -102,7 +101,7 @@ void callGraph(Graph graph)
     else if (option == 5)
     {
         string input;
-        cout << "Vertex for out edges:\n";
+        cout << "Vertex for in edges:\n";
         getline(cin, input);
         int vertex = stoi(input);
         vector<int> inEdges = graph.inEdges(vertex);
@@ -117,18 +116,33 @@ void callGraph(Graph graph)
     {
         graph.printOutAdjacencyMatrix();
     }
-    else if (option == 7)
+    else if (option == 7) // Ctrl+C also works but oh well, not trigger detecting here
     {
         return;
     }
-    callGraph(graph);
+    callGraph(graph, nullptr);
 }
 
-int main(int, char**) {
+int main(int argc, char** argv) {
     string sizeInput;
-    cout << "How many vertices do you want your graph to be?" << endl;
-    getline(cin, sizeInput);
-    int size = stoi(sizeInput);
-    Graph graph = Graph(size);
-    callGraph(graph);
+    if (argc > 1 && (string) argv[1] == "-f")
+    {
+        ifstream fileInput;
+        string arg2 = argv[2];
+        fileInput.open(arg2);
+        getline(fileInput, sizeInput);
+        int size = stoi(sizeInput);
+        Graph graph = Graph(size);
+        callGraph(graph, &fileInput);
+        fileInput.close();
+    }
+    else
+    {
+        cout << "How many vertices do you want your graph to be?" << endl;
+        getline(cin, sizeInput);
+        int size = stoi(sizeInput);
+        Graph graph = Graph(size);
+        callGraph(graph, nullptr);
+    }
+    
 }

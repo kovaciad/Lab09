@@ -20,6 +20,15 @@
             EXPECT_FALSE(graph.addEdge(i,j));
         }
 
+        TEST(addEdge, iEqualsj)
+        {
+            Graph graph = Graph(5);
+            auto i = 1;
+            auto j = 1;
+            EXPECT_FALSE(graph.addEdge(i,j));
+        }
+
+
         TEST(removeEdge, canRemove)
         {
             Graph graph = Graph(5);
@@ -142,8 +151,7 @@
             graph.addEdge(i, j);
             EXPECT_TRUE(graph.printOutAdjacencyMatrix() == expected);
         }
-
-
+        
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
