@@ -1,0 +1,2 @@
+For using this lab, you should run it by doing "build/runMain -f matrix.txt" to input the given matrix.
+If you want to make your own, place the number of vertices above your matrix and make a space-separated matrix.

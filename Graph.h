@@ -21,5 +21,5 @@ public:
 
 private:
     int numVertices;
-    int** matrix;
+    std::vector<std::vector < int > > matrix;
 };

@@ -2,23 +2,17 @@
 #include "Graph.h"
 
 
-Graph::Graph(int numVertices) // 2D Dynamically allocated matrix inspired by https://www.learncpp.com/cpp-tutorial/pointers-to-pointers/
+Graph::Graph(int numVertices)
 {
-    matrix = new int*[numVertices];
     for (int i = 0; i < numVertices; i++)
     {
-        matrix[i] = new int[numVertices];
+        matrix.push_back(std::vector<int>(numVertices));
     }
     this->numVertices = numVertices;
 }
 
 Graph::~Graph()
 {
-    // for (int i = 0; i < numVertices; i++)
-    // {
-    //     delete [] matrix[i];
-    // }
-    // delete[] matrix;
 }
 
 bool Graph::addEdge(int i, int j)
